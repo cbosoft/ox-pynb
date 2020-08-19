@@ -50,6 +50,7 @@
 
 * Number 5
 
+
   The Oak
 
   #+BEGIN_SRC C++
@@ -64,3 +65,11 @@
   #+BEGIN_SRC python
     print("this is a string, 'with \"nested\"' quotes")
   #+END_SRC
+
+* Number 6
+
+  - Checklist
+    - [ ] Item 1
+    - [X] Item 2
+    - [X] Item 3
+    - [ ] Item 4
