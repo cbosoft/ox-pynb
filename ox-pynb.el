@@ -32,15 +32,45 @@ option"
   "Return SECTION..."
   (pynb-cell-markdown contents))
 
+
+(defun is-whitespace-p (string)
+  (or (string-equal string " ")
+      (string-equal string "\t")))
+
+(defun count-leading-whitespace (string)
+  "Get number of leading white space chars in STRING"
+  (if (> (length string) 0)
+      (let ((first-char (substring string 0 1)))
+        (if first-char
+            (if (is-whitespace-p first-char)
+                (+ 1 (count-leading-whitespace (substring string 1 (length string))))
+              0)
+          0))
+    0))
+  
+
+(defun get-smallest-leading-whitespace-count (strings)
+  "Return number of whitespace characters leading on each string in STRINGS"
+  (let* ((seq (delete 0 (mapcar 'count-leading-whitespace strings))))
+    (if seq
+        (seq-min seq)
+      0)))
 (defun pynb-format-string-list-element (string)
   "Applies double quotes, comma, newline to STRING."
   (format "\"%s\"" string))
 
 (defun pynb-format-contents (contents)
   "Format CONTENTS as string list."
-  (mapconcat 'pynb-format-string-list-element
-             (split-string contents "\n")
-             ",\n"))
+  (let* ((lines (split-string contents "\n"))
+         (leading-ws-chars (get-smallest-leading-whitespace-count lines))
+         (lines-no-leading-ws (mapcar
+                               (lambda (s) (if (> (length s) leading-ws-chars)
+                                               (substring s leading-ws-chars (length s))
+                                             s))
+                               lines)))
+    (mapconcat 'pynb-format-string-list-element
+               lines-no-leading-ws
+               ",\n")))
 
 (defun pynb-cell (contents type &optional outputs-etc)
   "Return CONTENTS formatted as ipynb cell"
