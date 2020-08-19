@@ -14,7 +14,8 @@ The conversion to .ipynb/json is a bit cave-person-ish, so lists don't work yet.
 
  - This means that having lists:
   ```python
-with source```
+with source
+```
   - embedded in them, **are a no go** at the moment.
 
 However, headings/subheadings are fine.
