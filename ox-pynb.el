@@ -66,7 +66,9 @@ option"
          (leading-ws-chars (get-smallest-leading-whitespace-count lines))
          (lines-no-leading-ws (mapcar
                                (lambda (s) (if (> (length s) leading-ws-chars)
-                                               (substring s leading-ws-chars (length s))
+                                               (if (string-equal (substring s 0 1) "`")
+                                                   s
+                                                 (substring s leading-ws-chars (length s)))
                                              s))
                                lines)))
     (mapconcat 'pynb-format-string-list-element
