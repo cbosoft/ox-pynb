@@ -55,9 +55,10 @@ option"
     (if seq
         (seq-min seq)
       0)))
+
 (defun pynb-format-string-list-element (string)
   "Applies double quotes, comma, newline to STRING."
-  (format "\"%s\"" string))
+  (format "\"%s\\n\"" string))
 
 (defun pynb-format-contents (contents)
   "Format CONTENTS as string list."
