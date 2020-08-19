@@ -1,14 +1,49 @@
 #+TITLE: Test org-py-nb
 
 
-* Section 1
+* Number 1
 
   In this notebook, we will discuss how to recognise different types of trees.
 
-** Section 1, sub-section a
+** Number 1a
 
-   The Larch
+   The Larch.
 
    #+BEGIN_SRC python
-   print('The Larch')
+     print('The Larch.')
    #+END_SRC
+
+* Number 2
+
+  The Larch.
+
+* Number 3...
+
+  #+BEGIN_SRC python
+    from matplotlib import pyplot as plt
+    import numpy as np
+
+    x = np.linspace(0, np.pi*2, 100)
+    y = np.sin(x)
+
+    plt.plot(x, y)
+    plt.show()
+  #+END_SRC
+
+  ... The Larch.
+
+
+* Number 67
+
+  #+BEGIN_SRC python
+
+    def the_larch(*args, **kwargs):
+        real_args = list()
+        for arg in args:
+            real_args.append('(THE LARCH)')
+            real_args.append(arg)
+        print(*real_args, **kwargs)
+
+    the_larch(*('hello how are you'.split()))
+        
+  #+END_SRC
