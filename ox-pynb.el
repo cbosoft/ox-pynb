@@ -58,7 +58,7 @@ option"
 
 (defun pynb-format-string-list-element (string)
   "Applies double quotes, comma, newline to STRING."
-  (format "\"%s\\n\"" string))
+  (format "\"%s\\n\"" (replace-regexp-in-string "\\([^\\]\\)\"" "\\1\\\\\"" string)))
 
 (defun pynb-format-contents (contents)
   "Format CONTENTS as string list."
