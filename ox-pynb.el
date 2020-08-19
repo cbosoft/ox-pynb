@@ -61,7 +61,7 @@ option"
 
 
 (defun pynb-format-string-list-element (string)
-  "Applies double quotes, comma, newline to STRING."
+  "Applies double quotes, comma, newline to STRING, and escapes backslashes and quotes."
   (format "\"%s\\n\"" (replace-regexp-in-string "\\\"" "\\\\\""
                                                 (replace-regexp-in-string "\\\\" "\\\\\\\\" string)))
   )
