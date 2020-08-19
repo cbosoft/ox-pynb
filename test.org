@@ -47,3 +47,20 @@
     the_larch(*('hello how are you'.split()))
         
   #+END_SRC
+
+* Number 5
+
+  The Oak
+
+  #+BEGIN_SRC C++
+    #include <iostream>
+
+    int main(void)
+    {
+      std::cout << "The Oak" << std::endl;
+    }
+  #+END_SRC
+  
+  #+BEGIN_SRC python
+    print("this is a string, 'with \"nested\"' quotes")
+  #+END_SRC
