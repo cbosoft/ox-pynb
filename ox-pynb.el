@@ -28,14 +28,17 @@ transcoded contents string.  INFO is a plist holding export
 option"
   (contents))
 
+
 (defun pynb-section (section contents info)
   "Return SECTION..."
   (pynb-cell-markdown contents))
 
 
 (defun is-whitespace-p (string)
+  "Return t if STRING is a whitespace character (space or tab, not newline)."
   (or (string-equal string " ")
       (string-equal string "\t")))
+
 
 (defun count-leading-whitespace (string)
   "Get number of leading white space chars in STRING"
@@ -79,6 +82,7 @@ option"
                lines-no-leading-ws
                ",\n")))
 
+
 (defun pynb-cell (contents type &optional outputs-etc)
   "Return CONTENTS formatted as ipynb cell"
   (format "{\n  \"cell_type\": \"%s\",\n  \"metadata\": {},\n  \"source\": [%s]%s\n},"
@@ -86,17 +90,21 @@ option"
           (pynb-format-contents contents)
           (if outputs-etc (format ",\n  \"outputs\": [],\n\"execution_count\": 0")  "")))
 
+
 (defun pynb-cell-markdown (contents)
   "Return CONTENTS formatted as an ipynb markdown cell."
   (pynb-cell contents "markdown"))
+
 
 (defun pynb-cell-python (contents)
   "Return CONTENTS formatted as an ipynb python code cell."
   (pynb-cell contents "code" t))
 
+
 (defun all-but-last-char (string)
   "Returns all but the last character of STRING"
   (substring string 0 (- (length string) 2 )))
+
 
 (defun pynb-template (contents info)
   "Return complete document string after HTML conversion.
@@ -108,8 +116,6 @@ holding export options."
                              (all-but-last-char contents))))
     (format "{\n\"cells\": [\n%s\n],\"metadata\": {\"kernelspec\": {\"display_name\": \"Python 3\", \"language\": \"python\", \"name\":\"python3\"}, \"language_info\": {\"codemirror_mode\": {\"name\":\"ipython\",\"version\":3}, \"file_extension\": \".py\", \"mimetype\":\"text/x-python\",\"name\":\"python\",\"nbconvert_exporter\":\"python\",\"pygments_lexer\":\"ipython3\", \"version\":\"3.8.3\"}},\"nbformat\":4,\"nbformat_minor\": 4\n}"
             formatted-contents)))
-
-
 
 
 (defun org-pynb-headline (headline contents info)
@@ -124,15 +130,6 @@ holding contextual information."
       (format "%s %s" (make-string (+ level 1) ?#) title))
      (or contents ""))))
 
-;;   (let* ((level (org-export-get-relative-level headline info))
-;; 	 ;; TODO: make level non-relative
-;; 	 (text (org-export-data (org-element-property :title headline) infoy))
-;; 					;(tag (assoc level ox-pynb-headline-format-alist)))
-;; 	 (tag (cond ((= level 1) "##")
-;; 		    ((= level 2) "###")
-;; 		    ((= level 3) "####")
-;; 		    (else ""))) ;; TODO fix headline assoc list?
-;;     (format "%s %s\n\n%s" tag text (or contents "")))))
 
 (defun org-pynb-src-block (src-block contents info)
   "Return CONTENTS of SRC-BLOCK formatted as a python code block, if language is python, else as a markdown block with code formatting."
@@ -150,8 +147,6 @@ holding contextual information."
                     (?f "As .ipynb file" org-pynb-export-to-file)
                     (?F "As .ipynb file and open" org-pynb-export-to-file-and-open)
                     ))
-                                        ;(lambda (a s v b) (org-pynb-export-as-pynb a s v)))
-                   ;org-pynb-export-to-buffer)
   :translate-alist '((inner-template . plain2)
                      (template . pynb-template)
 		     (paragraph . pynb-section)
@@ -159,11 +154,13 @@ holding contextual information."
                      (src-block . org-pynb-src-block)
                      ))
 
+
 (defun org-pynb-export-to-buffer (&optional async subtreep visible-only body-only)
   "  "
   (interactive)
   (org-export-to-buffer 'pynb "*Org PyNB Export*"
     async subtreep visible-only body-only nil (lambda () (json-mode))))
+
 
 (defun org-pynb-export-to-file (&optional async subtreep visible-only body-only)
   "  "
@@ -172,14 +169,12 @@ holding contextual information."
     (org-export-to-file 'pynb fname
         async subtreep visible-only body-only nil (lambda (f) fname))))
 
+
 (defun org-pynb-export-to-file-and-open (&optional async subtreep visible-only body-only)
   "  "
   (interactive)
   (org-open-file
    (org-pynb-export-to-file async subtreep visible-only body-only)))
-
-
-
 
 
 (provide 'ox-pynb)
