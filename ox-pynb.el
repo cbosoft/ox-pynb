@@ -107,7 +107,14 @@ holding contextual information."
 
 
 (org-export-define-derived-backend 'pynb 'ascii
-  :menu-entry '(?m "pynb" (lambda (a s v b) (org-pynb-export-as-pynb a s v)))
+  :menu-entry '(?i "Export to IPythonNotebook"
+                   (
+                    (?b "As .ipynb buffer" org-pynb-export-to-buffer)
+                    (?f "As .ipynb file" org-pynb-export-to-file)
+                    (?F "As .ipynb file and open" org-pynb-export-to-file-and-open)
+                    ))
+                                        ;(lambda (a s v b) (org-pynb-export-as-pynb a s v)))
+                   ;org-pynb-export-to-buffer)
   :translate-alist '((inner-template . plain2)
                      (template . pynb-template)
 		     (paragraph . pynb-section)
@@ -115,11 +122,24 @@ holding contextual information."
                      (src-block . org-pynb-src-block)
                      ))
 
-(defun org-pynb-export-as-pynb (&optional async subtreep visible-only)
+(defun org-pynb-export-to-buffer (&optional async subtreep visible-only body-only)
   "  "
   (interactive)
   (org-export-to-buffer 'pynb "*Org PyNB Export*"
-    async subtreep visible-only nil nil (lambda () (html-mode))))
+    async subtreep visible-only body-only nil (lambda () (json-mode))))
+
+(defun org-pynb-export-to-file (&optional async subtreep visible-only body-only)
+  "  "
+  (interactive)
+  (let ((fname (org-export-output-file-name ".ipynb" subtreep)))
+    (org-export-to-file 'pynb fname
+        async subtreep visible-only body-only nil (lambda (f) fname))))
+
+(defun org-pynb-export-to-file-and-open (&optional async subtreep visible-only body-only)
+  "  "
+  (interactive)
+  (org-open-file
+   (org-pynb-export-to-file async subtreep visible-only body-only)))
 
 
 
