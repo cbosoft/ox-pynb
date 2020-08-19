@@ -34,27 +34,27 @@ option"
   (pynb-cell-markdown contents))
 
 
-(defun is-whitespace-p (string)
+(defun pynb-cell-source-is-whitespace-p (string)
   "Return t if STRING is a whitespace character (space or tab, not newline)."
   (or (string-equal string " ")
       (string-equal string "\t")))
 
 
-(defun count-leading-whitespace (string)
-  "Get number of leading white space chars in STRING"
+(defun pynb-cell-source-count-leading-whitespace (string)
+  "Get number of leading white space chars in STRING."
   (if (> (length string) 0)
       (let ((first-char (substring string 0 1)))
         (if first-char
-            (if (is-whitespace-p first-char)
-                (+ 1 (count-leading-whitespace (substring string 1 (length string))))
+            (if (pynb-cell-source-is-whitespace-p first-char)
+                (+ 1 (pynb-cell-source-count-leading-whitespace (substring string 1 (length string))))
               0)
           0))
     0))
   
 
-(defun get-smallest-leading-whitespace-count (strings)
-  "Return number of whitespace characters leading on each string in STRINGS"
-  (let* ((seq (delete 0 (mapcar 'count-leading-whitespace strings))))
+(defun pynb-cell-source-get-smallest-leading-whitespace-count (strings)
+  "Return number of whitespace characters leading on each string in STRINGS."
+  (let* ((seq (delete 0 (mapcar 'pynb-cell-source-count-leading-whitespace strings))))
     (if seq
         (seq-min seq)
       0)))
@@ -70,12 +70,12 @@ option"
 (defun pynb-format-contents (contents)
   "Format CONTENTS as string list."
   (let* ((lines (split-string contents "\n"))
-         (leading-ws-chars (get-smallest-leading-whitespace-count lines))
+         (number-leading-ws-chars (pynb-cell-source-get-smallest-leading-whitespace-count lines))
          (lines-no-leading-ws (mapcar
-                               (lambda (s) (if (> (length s) leading-ws-chars)
+                               (lambda (s) (if (> (length s) number-leading-ws-chars)
                                                (if (string-equal (substring s 0 1) "`")
                                                    s
-                                                 (substring s leading-ws-chars (length s)))
+                                                 (substring s number-leading-ws-chars (length s)))
                                              s))
                                lines)))
     (mapconcat 'pynb-format-string-list-element
